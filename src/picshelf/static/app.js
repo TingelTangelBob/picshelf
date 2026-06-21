@@ -11,12 +11,13 @@ const icons = {
   download: '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
   share: '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>',
   check: '<svg viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>',
-  menu: '<svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>',
+  sidebarOpen: '<svg viewBox="0 0 24 24"><path d="M21 4H9a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12"/><path d="m11 8-4 4 4 4"/></svg>',
+  sidebarClose: '<svg viewBox="0 0 24 24"><path d="M3 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3"/><path d="m13 8 4 4-4 4"/></svg>',
   monitor: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>',
   sun: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
   moon: '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></svg>',
-  github: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.48c.5.09.68-.21.68-.47v-1.65c-2.77.6-3.35-1.19-3.35-1.19-.45-1.15-1.1-1.46-1.1-1.46-.9-.61.07-.6.07-.6 1 .07 1.52 1.02 1.52 1.02.88 1.52 2.31 1.08 2.87.83.09-.64.34-1.08.62-1.33-2.21-.25-4.53-1.1-4.53-4.93 0-1.09.39-1.98 1.02-2.68-.1-.25-.44-1.28.1-2.66 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 7.84c.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.54 1.38.2 2.41.1 2.66.63.7 1.02 1.59 1.02 2.68 0 3.84-2.33 4.67-4.55 4.92.35.3.66.88.66 1.77v2.62c0 .26.18.57.69.47A10 10 0 0 0 12 2Z"/></svg>',
-  heart: '<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.42C.4 9.6 1.42 5.5 5.3 4.4c2.1-.6 4.06.16 5.2 1.72 1.14-1.56 3.1-2.32 5.2-1.72 3.88 1.1 4.9 5.2 2.8 8.18C19 16.65 12 21 12 21Z"/></svg>'
+  github: '<svg viewBox="0 0 24 24"><path d="M12 1.5A10.5 10.5 0 0 0 8.7 22c.53.1.73-.23.73-.52v-1.82c-2.98.65-3.61-1.28-3.61-1.28-.49-1.24-1.2-1.57-1.2-1.57-1-.68.08-.67.08-.67 1.1.08 1.68 1.1 1.68 1.1.98 1.68 2.58 1.19 3.21.92.1-.73.38-1.22.72-1.5-2.61-.3-5.34-1.31-5.34-5.85 0-1.29.46-2.35 1.21-3.17-.12-.29-.52-1.44.11-3 0 0 .99-.31 3.24 1.2a11 11 0 0 1 5.88 0c2.25-1.51 3.24-1.2 3.24-1.2.63 1.56.23 2.71.11 3 .75.82 1.21 1.88 1.21 3.17 0 4.56-2.74 5.55-5.35 5.85.42.37.8 1.07.8 2.16v3.05c0 .29.2.63.74.52A10.5 10.5 0 0 0 12 1.5Z"/></svg>',
+  heart: '<svg viewBox="0 0 24 24"><path d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5A4.5 4.5 0 0 1 6.5 4c1.74 0 3.41.81 4.5 2.09A6 6 0 0 1 15.5 4 4.5 4.5 0 0 1 20 8.5c0 3.78-3.4 6.86-8 12.85Z"/></svg>'
 };
 
 const state = {
@@ -89,11 +90,12 @@ const confirmMessage = document.querySelector("#confirm-message");
 const confirmCancel = document.querySelector("#confirm-cancel");
 const confirmOk = document.querySelector("#confirm-ok");
 const buildVersion = document.querySelector("#build-version");
+const versionLink = document.querySelector("#version-link");
 const githubLink = document.querySelector("#github-link");
 const donateLink = document.querySelector("#donate-link");
 
 uploadOpen.innerHTML = icons.upload;
-sidebarToggle.innerHTML = icons.menu;
+sidebarToggle.innerHTML = icons.sidebarClose;
 themeToggle.innerHTML = icons.monitor;
 viewGrid.innerHTML = icons.grid;
 viewList.innerHTML = icons.list;
@@ -173,15 +175,17 @@ function renderDisk(disk) {
 function renderBuild(meta) {
   if (!meta) {
     buildVersion.textContent = "unbekannt";
+    versionLink.href = "#";
     return;
   }
   buildVersion.textContent = meta.version;
+  versionLink.href = meta.releaseUrl || "#";
 }
 
 function setSidebarOpen(open) {
   state.sidebarOpen = open;
   app.classList.toggle("sidebar-collapsed", !open);
-  sidebarToggle.innerHTML = open ? icons.close : icons.menu;
+  sidebarToggle.innerHTML = open ? icons.sidebarClose : icons.sidebarOpen;
   sidebarToggle.title = open ? "Seitenleiste schließen" : "Seitenleiste öffnen";
   sidebarToggle.setAttribute("aria-label", sidebarToggle.title);
   sidebarToggle.setAttribute("aria-expanded", String(open));

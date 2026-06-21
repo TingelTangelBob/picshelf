@@ -631,6 +631,7 @@ class PicShelfHandler(BaseHTTPRequestHandler):
                 {
                     "version": __version__,
                     "build": self.config["build_label"],
+                    "releaseUrl": f"https://github.com/TingelTangelBob/picshelf/releases/tag/v{__version__}",
                 },
             )
             return

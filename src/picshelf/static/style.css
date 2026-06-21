@@ -423,26 +423,6 @@ h1 {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.version-card {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  min-width: 0;
-  padding: 10px 12px;
-  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--panel) 62%, transparent);
-}
-.version-label {
-  color: var(--muted);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.version-card strong {
-  font-size: 13px;
-  line-height: 1.15;
-}
 .content {
   min-width: 0;
   min-height: 0;
@@ -474,7 +454,7 @@ h1 {
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 14px;
   align-items: start;
 }
@@ -491,7 +471,7 @@ h1 {
   min-width: 0;
 }
 .grid:not(.list) .card {
-  height: var(--card-height);
+  height: 310px;
 }
 .card.selected {
   border-color: var(--accent);
@@ -529,7 +509,7 @@ h1 {
   overflow: hidden;
 }
 .grid:not(.list) .preview {
-  height: 160px;
+  height: 156px;
   aspect-ratio: auto;
 }
 .list .preview {
@@ -548,8 +528,8 @@ h1 {
 .meta {
   min-width: 0;
   display: grid;
-  gap: 6px;
-  padding: 10px 10px 8px;
+  gap: 4px;
+  padding: 8px 10px 7px;
 }
 .grid:not(.list) .meta {
   display: flex;
@@ -603,9 +583,14 @@ h1 {
 .card-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
   justify-content: flex-end;
   margin-top: auto;
+}
+.card-actions .icon-button {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
 }
 .list .card-actions {
   flex-wrap: nowrap;
@@ -844,6 +829,21 @@ input, select {
   backdrop-filter: blur(1px);
   z-index: 12;
 }
+.version-link {
+  margin-top: auto;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.2;
+  text-decoration: none;
+  text-align: left;
+}
+.version-link span {
+  color: inherit;
+  font-weight: 600;
+}
+.version-link:hover {
+  color: var(--text);
+}
 .drop-overlay {
   position: fixed;
   inset: 0;
@@ -882,9 +882,9 @@ input, select {
   h1 { display: none; }
   .search-wrap { justify-self: stretch; }
   .content { padding: 10px; }
-  .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  .grid:not(.list) .card { height: 300px; }
-  .grid:not(.list) .preview { height: 148px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); }
+  .grid:not(.list) .card { height: 292px; }
+  .grid:not(.list) .preview { height: 144px; }
   .list .card { grid-template-columns: 88px 1fr; }
   .list .meta { grid-template-columns: 1fr; }
   .list .card-actions { justify-content: flex-start; }
