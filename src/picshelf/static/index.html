@@ -11,7 +11,6 @@
   <div class="app" id="app">
     <header class="topbar">
       <div class="brand-group">
-        <button class="icon-button sidebar-toggle" id="sidebar-toggle" type="button" title="Seitenleiste umschalten" aria-label="Seitenleiste umschalten"></button>
         <button class="brand" id="brand-home" type="button" title="Alle Bilder" aria-label="Alle Bilder">
           <div class="brand-mark" aria-hidden="true"></div>
           <h1>__TITLE__</h1>
@@ -29,6 +28,11 @@
 
     <div class="shell">
       <aside class="sidebar">
+        <div class="sidebar-actions" aria-label="Navigation">
+          <button class="side-tool active" type="button" title="Bilder" aria-label="Bilder"></button>
+          <button class="side-tool" id="sidebar-upload" type="button" title="Hochladen" aria-label="Hochladen"></button>
+          <button class="side-tool" id="sidebar-theme" type="button" title="Theme" aria-label="Theme"></button>
+        </div>
         <div class="side-section">
           <div class="side-label">Ansicht</div>
           <nav id="filters" aria-label="Ansichten"></nav>
@@ -45,11 +49,12 @@
         <footer class="sidebar-footer">
           <div class="social-links">
             <a class="icon-link" id="github-link" href="https://github.com/TingelTangelBob" target="_blank" rel="noreferrer" title="GitHub" aria-label="GitHub"></a>
-            <a class="icon-link" id="donate-link" href="https://github.com/sponsors/TingelTangelBob" target="_blank" rel="noreferrer" title="Donate" aria-label="Donate"></a>
+            <a class="icon-link donate" id="donate-link" href="https://github.com/sponsors/TingelTangelBob" target="_blank" rel="noreferrer" title="Donate" aria-label="Donate"></a>
           </div>
           <a class="version-link" id="version-link" href="#" target="_blank" rel="noreferrer">Version <span id="build-version">Lade...</span></a>
         </footer>
       </aside>
+      <button class="icon-button sidebar-toggle" id="sidebar-toggle" type="button" title="Seitenleiste umschalten" aria-label="Seitenleiste umschalten"></button>
 
       <main class="content">
         <div class="content-head">

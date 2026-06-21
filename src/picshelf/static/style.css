@@ -255,6 +255,37 @@ h1 {
   display: flex;
   flex-direction: column;
 }
+.sidebar-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 38px);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.side-tool {
+  width: 38px;
+  height: 38px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border-color: transparent;
+  background: color-mix(in srgb, var(--panel) 62%, transparent);
+  color: var(--muted);
+}
+.side-tool:hover,
+.side-tool.active {
+  border-color: color-mix(in srgb, var(--line) 72%, transparent);
+  background: var(--panel);
+  color: var(--text);
+}
+.side-tool svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .app.sidebar-collapsed .shell {
   grid-template-columns: 0 1fr;
 }
@@ -423,6 +454,14 @@ h1 {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.icon-link svg.solid-icon {
+  fill: currentColor;
+  stroke: none;
+}
+.icon-link.donate:hover {
+  border-color: #d94b73;
+  color: #d94b73;
+}
 .content {
   min-width: 0;
   min-height: 0;
@@ -462,7 +501,7 @@ h1 {
 .card {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -471,7 +510,7 @@ h1 {
   min-width: 0;
 }
 .grid:not(.list) .card {
-  height: 310px;
+  height: auto;
 }
 .card.selected {
   border-color: var(--accent);
@@ -529,12 +568,9 @@ h1 {
   min-width: 0;
   display: grid;
   gap: 4px;
-  padding: 8px 10px 7px;
+  padding: 8px 10px 10px;
 }
 .grid:not(.list) .meta {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   min-height: 0;
 }
 .list .meta {
@@ -585,12 +621,16 @@ h1 {
   flex-wrap: wrap;
   gap: 4px;
   justify-content: flex-end;
-  margin-top: auto;
+  margin-top: 8px;
 }
 .card-actions .icon-button {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+.card-actions .icon-button svg {
+  width: 16px;
+  height: 16px;
 }
 .list .card-actions {
   flex-wrap: nowrap;
@@ -883,7 +923,7 @@ input, select {
   .search-wrap { justify-self: stretch; }
   .content { padding: 10px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); }
-  .grid:not(.list) .card { height: 292px; }
+  .grid:not(.list) .card { height: auto; }
   .grid:not(.list) .preview { height: 144px; }
   .list .card { grid-template-columns: 88px 1fr; }
   .list .meta { grid-template-columns: 1fr; }
@@ -899,6 +939,18 @@ input, select {
     transform: translateX(-100%);
     box-shadow: 16px 0 34px rgba(17, 24, 39, 0.18);
     transition: transform 180ms ease, opacity 180ms ease;
+  }
+  .sidebar-toggle {
+    position: fixed;
+    left: 8px;
+    top: calc(var(--topbar) + 8px);
+    z-index: 16;
+    border-color: var(--line);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+  }
+  .app:not(.sidebar-collapsed) .sidebar-toggle {
+    left: calc(var(--sidebar) - 19px);
   }
   .app.sidebar-collapsed .shell {
     grid-template-columns: 1fr;
@@ -916,6 +968,18 @@ input, select {
   }
 }
 @media (min-width: 761px) {
+  .sidebar-toggle {
+    position: absolute;
+    top: 12px;
+    left: calc(var(--sidebar) - 19px);
+    z-index: 6;
+    border-color: var(--line);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+  }
+  .app.sidebar-collapsed .sidebar-toggle {
+    left: 12px;
+  }
   .app.sidebar-collapsed .shell {
     grid-template-columns: 0 1fr;
   }
