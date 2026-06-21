@@ -14,6 +14,7 @@
   --shadow: 0 1px 2px rgba(20, 30, 40, 0.08);
   --topbar: 56px;
   --sidebar: 210px;
+  --card-height: 372px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -86,6 +87,19 @@ button:disabled {
   cursor: wait;
   opacity: 0.55;
 }
+.brand {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  min-width: 0;
+  text-align: left;
+}
+.brand:hover { border-color: transparent; }
 .icon-button {
   width: 38px;
   height: 38px;
@@ -142,12 +156,15 @@ button:disabled {
   min-width: 0;
 }
 .brand-mark {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 8px;
   background:
     url("/assets/picshelf-logo.svg") center/contain no-repeat,
     transparent;
+  background-size: 92%;
+  border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  background-color: color-mix(in srgb, var(--panel) 88%, var(--bg) 12%);
   flex: 0 0 auto;
 }
 h1 {
@@ -344,13 +361,54 @@ h1 {
 }
 .sidebar-footer {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   margin-top: auto;
-  padding-top: 18px;
+  padding-top: 14px;
+}
+.build-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 10px 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--panel) 62%, transparent);
+}
+.build-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.build-label {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.build-copy strong {
+  font-size: 13px;
+  line-height: 1.15;
+}
+.build-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.25;
+}
+.build-update {
+  min-height: 34px;
+  padding: 0 11px;
+  border-color: color-mix(in srgb, var(--line) 72%, transparent);
+  background: color-mix(in srgb, var(--panel) 82%, var(--bg) 18%);
+  color: var(--text);
+  font-weight: 650;
+}
+.build-update:hover {
+  border-color: var(--accent);
 }
 .donate-button,
 .author-link {
-  min-height: 34px;
+  min-height: 30px;
   display: grid;
   align-items: center;
   border-radius: 6px;
@@ -358,23 +416,29 @@ h1 {
 }
 .donate-button {
   justify-content: center;
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--panel) 70%, transparent);
-  color: var(--text);
-  font-weight: 650;
+  border: 1px solid color-mix(in srgb, var(--line) 68%, transparent);
+  background: color-mix(in srgb, var(--panel) 56%, transparent);
+  color: color-mix(in srgb, var(--text) 82%, var(--muted));
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  opacity: 0.88;
 }
 .donate-button:hover {
-  border-color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+  background: color-mix(in srgb, var(--panel) 68%, transparent);
+  opacity: 1;
 }
 .author-link {
-  color: var(--muted);
-  font-size: 12px;
+  color: color-mix(in srgb, var(--muted) 90%, var(--text));
+  font-size: 11px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  opacity: 0.8;
 }
 .author-link:hover {
   color: var(--text);
+  opacity: 1;
 }
 .content {
   min-width: 0;
@@ -415,13 +479,16 @@ h1 {
 .card {
   position: relative;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--panel);
   box-shadow: var(--shadow);
   min-width: 0;
+}
+.grid:not(.list) .card {
+  height: var(--card-height);
 }
 .card.selected {
   border-color: var(--accent);
@@ -438,7 +505,8 @@ h1 {
   height: 30px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--panel);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(8px);
   box-shadow: var(--shadow);
 }
 .select-wrap input {
@@ -456,6 +524,10 @@ h1 {
   display: grid;
   place-items: center;
   overflow: hidden;
+}
+.grid:not(.list) .preview {
+  height: 205px;
+  aspect-ratio: auto;
 }
 .list .preview {
   aspect-ratio: auto;
@@ -475,6 +547,12 @@ h1 {
   display: grid;
   gap: 9px;
   padding: 11px;
+}
+.grid:not(.list) .meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
 }
 .list .meta {
   grid-template-columns: minmax(180px, 1fr) auto;
@@ -497,6 +575,10 @@ h1 {
   font-weight: 700;
   line-height: 1.25;
   overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .category {
   color: var(--muted);
@@ -520,6 +602,7 @@ h1 {
   flex-wrap: wrap;
   gap: 6px;
   justify-content: flex-end;
+  margin-top: auto;
 }
 .list .card-actions {
   flex-wrap: nowrap;
@@ -617,7 +700,10 @@ input, select {
   height: 46px;
   padding: 0 46px 0 14px;
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 82%, var(--bg) 18%);
+  border-color: color-mix(in srgb, var(--line) 78%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 .combo input:focus {
   border-color: var(--accent);
@@ -628,21 +714,22 @@ input, select {
   position: absolute;
   right: 8px;
   top: 50%;
-  width: 30px;
+  width: 32px;
   height: 30px;
   display: grid;
   place-items: center;
-  border: 0;
-  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
   transform: translateY(-50%);
 }
 .combo-toggle::before {
   content: "";
   width: 0;
   height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 9px solid var(--text);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid var(--muted);
 }
 .combo-menu {
   position: absolute;
@@ -654,9 +741,9 @@ input, select {
   display: none;
   overflow: auto;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--panel);
-  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.14);
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.12);
   padding: 8px;
 }
 .combo.open .combo-menu {
@@ -665,10 +752,10 @@ input, select {
 .combo-menu::before {
   content: "";
   position: absolute;
-  top: -7px;
+  top: -6px;
   left: 26px;
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   border-left: 1px solid var(--line);
   border-top: 1px solid var(--line);
   background: var(--panel);
@@ -733,10 +820,44 @@ input, select {
 .confirm-dialog {
   width: min(440px, calc(100% - 24px));
 }
+.about-dialog {
+  width: min(620px, calc(100% - 24px));
+}
 .confirm-message {
   margin: 0;
   color: var(--text);
   line-height: 1.45;
+}
+.about-text {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.45;
+}
+.about-text span {
+  color: var(--muted);
+}
+.command-block {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.command-block textarea {
+  width: 100%;
+  min-height: 72px;
+  resize: none;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel-subtle);
+  color: var(--text);
+  padding: 10px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.command-block textarea:focus {
+  outline: 2px solid rgba(79, 100, 120, 0.18);
+  outline-offset: 0;
 }
 .status {
   min-height: 20px;
@@ -783,6 +904,8 @@ input, select {
   .search-wrap { justify-self: stretch; }
   .content { padding: 10px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .grid:not(.list) .card { height: 336px; }
+  .grid:not(.list) .preview { height: 182px; }
   .list .card { grid-template-columns: 88px 1fr; }
   .list .meta { grid-template-columns: 1fr; }
   .list .card-actions { justify-content: flex-start; }

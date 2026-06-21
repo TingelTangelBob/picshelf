@@ -25,10 +25,12 @@ const state = {
   images: [],
   pendingFiles: [],
   editing: null,
-  selected: new Set()
+  selected: new Set(),
+  meta: null
 };
 
 const grid = document.querySelector("#grid");
+const brandHome = document.querySelector("#brand-home");
 const filters = document.querySelector("#filters");
 const categoriesNav = document.querySelector("#categories");
 const count = document.querySelector("#count");
@@ -79,6 +81,15 @@ const confirmTitle = document.querySelector("#confirm-title");
 const confirmMessage = document.querySelector("#confirm-message");
 const confirmCancel = document.querySelector("#confirm-cancel");
 const confirmOk = document.querySelector("#confirm-ok");
+const buildVersion = document.querySelector("#build-version");
+const buildNote = document.querySelector("#build-note");
+const buildUpdate = document.querySelector("#build-update");
+const aboutDialog = document.querySelector("#about-dialog");
+const aboutVersion = document.querySelector("#about-version");
+const aboutBuild = document.querySelector("#about-build");
+const updateCommand = document.querySelector("#update-command");
+const copyUpdateCommand = document.querySelector("#copy-update-command");
+const closeAbout = document.querySelector("#close-about");
 
 uploadOpen.innerHTML = icons.upload;
 themeToggle.innerHTML = icons.monitor;
@@ -154,6 +165,38 @@ function renderDisk(disk) {
   `;
 }
 
+function renderBuild(meta) {
+  if (!meta) {
+    buildVersion.textContent = "unbekannt";
+    buildNote.textContent = "Build-Metadaten fehlen";
+    aboutVersion.textContent = "unbekannt";
+    aboutBuild.textContent = "";
+    updateCommand.value = "docker compose pull && docker compose up -d";
+    return;
+  }
+  const label = meta.build && meta.build !== "local" ? `${meta.version} · ${meta.build}` : meta.version;
+  buildVersion.textContent = label;
+  buildNote.textContent = "Update über Docker Compose";
+  aboutVersion.textContent = meta.version;
+  aboutBuild.textContent = meta.build && meta.build !== "local" ? ` (${meta.build})` : "";
+  updateCommand.value = meta.updateCommand || "docker compose pull && docker compose up -d";
+}
+
+function openAbout() {
+  aboutDialog.showModal();
+}
+
+async function copyUpdateCommandToClipboard() {
+  try {
+    await navigator.clipboard.writeText(updateCommand.value);
+  } catch {
+    updateCommand.focus();
+    updateCommand.select();
+    document.execCommand("copy");
+    updateCommand.setSelectionRange(0, 0);
+  }
+}
+
 function askConfirm({ title = "Bestätigen", message, action = "Löschen" }) {
   confirmTitle.textContent = title;
   confirmMessage.textContent = message;
@@ -188,6 +231,7 @@ closeOnBackdrop(editDialog);
 closeOnBackdrop(categoryDialog);
 closeOnBackdrop(previewDialog);
 closeOnBackdrop(confirmDialog, () => resolveConfirm(false));
+closeOnBackdrop(aboutDialog);
 
 function categoryNames() {
   return state.categories.map((category) => category.name);
@@ -472,10 +516,15 @@ function render() {
 
 async function load() {
   try {
-    const data = await apiJson("/api/images");
+    const [data, meta] = await Promise.all([
+      apiJson("/api/images"),
+      apiJson("/api/meta").catch(() => null)
+    ]);
     state.categories = data.categories;
     state.images = data.categories.flatMap((category) => category.items);
+    state.meta = meta;
     renderDisk(data.disk);
+    renderBuild(meta);
     const existingPaths = new Set(state.images.map((image) => image.path));
     state.selected = new Set([...state.selected].filter((path) => existingPaths.has(path)));
     if (state.activeMode === "category" && !categoryNames().includes(state.activeCategory)) {
@@ -512,12 +561,23 @@ function openEdit(image) {
   editDialog.showModal();
 }
 
+brandHome.addEventListener("click", () => {
+  state.activeMode = "all";
+  state.activeCategory = "Alle";
+  state.query = "";
+  search.value = "";
+  render();
+});
+
 search.addEventListener("input", () => {
   state.query = search.value;
   render();
 });
 
 themeToggle.addEventListener("click", cycleTheme);
+buildUpdate.addEventListener("click", openAbout);
+copyUpdateCommand.addEventListener("click", copyUpdateCommandToClipboard);
+closeAbout.addEventListener("click", () => aboutDialog.close());
 confirmCancel.addEventListener("click", () => resolveConfirm(false));
 confirmOk.addEventListener("click", () => resolveConfirm(true));
 confirmDialog.addEventListener("cancel", (event) => {

@@ -168,6 +168,7 @@ Hinweis: Nach dem ersten Push muss der GitHub-Action-Run einmal durchlaufen, bev
 | `PICSHELF_CACHE_SECONDS` | `3600` | Browser-Cache für Bilddateien |
 | `PICSHELF_MAX_UPLOAD_MB` | `50` | Maximale Größe einer Upload-Anfrage in MB |
 | `PICSHELF_ACCESS_LOG` | `0` | HTTP-Zugriffslog aktivieren mit `1` |
+| `PICSHELF_BUILD_LABEL` | `local` | Anzeige für den aktuellen Build in der Oberfläche |
 
 ## Entwicklung
 
@@ -188,6 +189,7 @@ PYTHONPATH=src python3 -m unittest discover -s tests
 
 ```text
 GET /api/images
+GET /api/meta
 POST /api/upload
 POST /api/categories
 POST /api/categories/delete

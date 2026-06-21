@@ -1,11 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
   <title id="title">PicShelf Favicon</title>
-  <desc id="desc">Kleines technisches Logo fuer den Browser-Tab.</desc>
-  <rect x="6" y="6" width="52" height="52" rx="12" fill="#111418"/>
-  <rect x="14" y="14" width="36" height="26" rx="5" fill="none" stroke="#a8b6c5" stroke-width="4"/>
-  <path d="M18 33h28" fill="none" stroke="#a8b6c5" stroke-width="4" stroke-linecap="round"/>
-  <path d="M20 28h8l4-6 6 8 4-4h4" fill="none" stroke="#eef2f6" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="20" cy="46" r="2.5" fill="#4f6478"/>
-  <circle cx="32" cy="46" r="2.5" fill="#4f6478"/>
-  <circle cx="44" cy="46" r="2.5" fill="#4f6478"/>
+  <desc id="desc">Klarer Browser-Tab-Icon mit hellem und dunklem Motiv.</desc>
+  <style>
+    :root {
+      color: #16202a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color: #eef2f6;
+      }
+      .bg { fill: #0f1318; }
+      .frame { stroke: #9fb0c1; }
+      .detail { stroke: #cbd5e1; }
+      .dot { fill: #89a0b6; }
+    }
+    @media (prefers-color-scheme: light) {
+      .bg { fill: #f3f6fa; }
+      .frame { stroke: #5f7286; }
+      .detail { stroke: #22303d; }
+      .dot { fill: #4f6478; }
+    }
+  </style>
+  <rect class="bg" x="10" y="10" width="108" height="108" rx="28"/>
+  <rect x="28" y="28" width="72" height="46" rx="11" fill="none" class="frame" stroke-width="6"/>
+  <path d="M34 58h60" fill="none" class="frame" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M36 50h12l6-10 10 12 8-8 8 6h6" fill="none" class="detail" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle class="dot" cx="39" cy="87" r="4.5"/>
+  <circle class="dot" cx="64" cy="87" r="4.5"/>
+  <circle class="dot" cx="89" cy="87" r="4.5"/>
 </svg>

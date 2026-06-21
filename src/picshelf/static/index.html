@@ -10,10 +10,10 @@
 <body>
   <div class="app" id="app">
     <header class="topbar">
-      <div class="brand">
+      <button class="brand" id="brand-home" type="button" title="Alle Bilder" aria-label="Alle Bilder">
         <div class="brand-mark" aria-hidden="true"></div>
         <h1>__TITLE__</h1>
-      </div>
+      </button>
       <div class="search-wrap">
         <input class="search" id="search" type="search" placeholder="Suchen" autocomplete="off">
       </div>
@@ -40,6 +40,14 @@
           <div class="status" id="category-status"></div>
         </div>
         <footer class="sidebar-footer">
+          <div class="build-card">
+            <div class="build-copy">
+              <span class="build-label">Version</span>
+              <strong id="build-version">Lade...</strong>
+              <span class="build-note" id="build-note">Build wird geprüft</span>
+            </div>
+            <button class="build-update" id="build-update" type="button">Update</button>
+          </div>
           <a class="donate-button" href="https://github.com/sponsors/TingelTangelBob" target="_blank" rel="noreferrer">Donate</a>
           <a class="author-link" href="https://github.com/TingelTangelBob" target="_blank" rel="noreferrer">GitHub · TingelTangelBob</a>
         </footer>
@@ -146,6 +154,27 @@
       <div class="dialog-actions">
         <button type="button" id="confirm-cancel">Abbrechen</button>
         <button class="danger" type="button" id="confirm-ok">Löschen</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="about-dialog" class="about-dialog">
+    <form class="dialog-head" method="dialog">
+      <p class="dialog-title">Version und Update</p>
+      <button class="icon-button" value="cancel" title="Schließen" aria-label="Schließen"></button>
+    </form>
+    <div class="dialog-body">
+      <p class="about-text">
+        Aktuell installiert: <strong id="about-version">-</strong>
+        <span id="about-build"></span>
+      </p>
+      <label class="command-block" for="update-command">
+        <span>Update über Docker Compose</span>
+        <textarea id="update-command" readonly rows="2"></textarea>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" id="copy-update-command">Kommando kopieren</button>
+        <button class="primary" type="button" id="close-about">Schließen</button>
       </div>
     </div>
   </dialog>

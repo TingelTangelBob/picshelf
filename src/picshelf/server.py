@@ -16,6 +16,8 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 from urllib.parse import quote, unquote, urlparse
 
+from . import __version__
+
 
 IMAGE_EXTENSIONS = {
     ".avif",
@@ -320,7 +322,7 @@ def render_app_index(title: str) -> bytes:
 
 
 class PicShelfHandler(BaseHTTPRequestHandler):
-    server_version = "PicShelf/0.1"
+    server_version = f"PicShelf/{__version__}"
 
     @property
     def config(self) -> dict[str, Any]:
@@ -623,6 +625,16 @@ class PicShelfHandler(BaseHTTPRequestHandler):
                 cache_control="no-store",
             )
             return
+        if path == "/api/meta":
+            self.send_json(
+                HTTPStatus.OK,
+                {
+                    "version": __version__,
+                    "build": self.config["build_label"],
+                    "updateCommand": "docker compose pull && docker compose up -d",
+                },
+            )
+            return
         if path == "/health":
             self.send_bytes(
                 HTTPStatus.OK,
@@ -719,6 +731,7 @@ def make_config() -> dict[str, Any]:
         "cache_seconds": env_int("PICSHELF_CACHE_SECONDS", 3600),
         "max_upload_bytes": max_upload_mb * 1024 * 1024,
         "access_log": env_bool("PICSHELF_ACCESS_LOG", False),
+        "build_label": os.environ.get("PICSHELF_BUILD_LABEL", "local"),
     }
 
 
