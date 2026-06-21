@@ -115,6 +115,40 @@ environment:
 
 Ohne `PICSHELF_BASE_URL` erzeugt die Oberfläche die Adresse aus der aktuell geöffneten Browser-URL.
 
+## Portainer
+
+Wenn du PicShelf in Portainer als Stack deployen willst, nutze die Datei `docker-compose.portainer.yml`.
+Sie baut direkt aus dem GitHub-Repo und braucht deshalb keinen lokalen `Dockerfile`-Pfad im Portainer-Editor.
+
+Wenn du den Stack manuell einfügst, funktioniert dieser Aufbau:
+
+```yaml
+services:
+  picshelf:
+    build:
+      context: https://github.com/TingelTangelBob/picshelf.git#main
+      dockerfile: Dockerfile
+    image: picshelf:portainer
+    container_name: picshelf
+    restart: unless-stopped
+    ports:
+      - "8099:8080"
+    environment:
+      TZ: Europe/Berlin
+      PICSHELF_TITLE: PicShelf
+      PICSHELF_IMAGES_DIR: /data/images
+      PICSHELF_CACHE_SECONDS: "3600"
+      PICSHELF_MAX_UPLOAD_MB: "50"
+      PICSHELF_ACCESS_LOG: "0"
+    volumes:
+      - /pfad/zu/bildern:/data/images
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+```
+
 ## Konfiguration
 
 | Variable | Standard | Bedeutung |
