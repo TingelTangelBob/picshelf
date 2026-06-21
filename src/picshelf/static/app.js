@@ -11,6 +11,8 @@ const icons = {
   download: '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
   share: '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>',
   check: '<svg viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>',
+  prev: '<svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg>',
+  next: '<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>',
   sidebarOpen: '<svg viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/><path d="M19 4v16"/></svg>',
   sidebarClose: '<svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/><path d="M5 4v16"/></svg>',
   images: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>',
@@ -71,6 +73,8 @@ const uploadCancel = document.querySelector("#upload-cancel");
 const previewDialog = document.querySelector("#preview-dialog");
 const previewTitle = document.querySelector("#preview-title");
 const previewImage = document.querySelector("#preview-image");
+const previewPrev = document.querySelector("#preview-prev");
+const previewNext = document.querySelector("#preview-next");
 const previewAddress = document.querySelector("#preview-address");
 const previewCopy = document.querySelector("#preview-copy");
 const bulkActions = document.querySelector("#bulk-actions");
@@ -95,6 +99,9 @@ const versionLink = document.querySelector("#version-link");
 const githubLink = document.querySelector("#github-link");
 const donateLink = document.querySelector("#donate-link");
 
+let previewImages = [];
+let previewIndex = -1;
+
 uploadOpen.innerHTML = icons.upload;
 sidebarToggle.innerHTML = icons.sidebarClose;
 themeToggle.innerHTML = icons.monitor;
@@ -104,6 +111,8 @@ document.querySelector("#upload-large-icon").innerHTML = icons.upload;
 document.querySelectorAll('button[value="cancel"]').forEach((button) => { button.innerHTML = icons.close; });
 categoryForm.querySelector("button").innerHTML = icons.plus;
 previewCopy.innerHTML = icons.copy;
+previewPrev.innerHTML = icons.prev;
+previewNext.innerHTML = icons.next;
 selectionClear.innerHTML = icons.close;
 bulkDelete.innerHTML = icons.trash;
 bulkDownload.innerHTML = icons.download;
@@ -479,13 +488,46 @@ function imageCard(image) {
   return card;
 }
 
-function openPreview(image) {
+function updatePreviewNav() {
+  const hasPrev = previewIndex > 0;
+  const hasNext = previewIndex >= 0 && previewIndex < previewImages.length - 1;
+  previewPrev.disabled = !hasPrev;
+  previewNext.disabled = !hasNext;
+}
+
+function showPreviewImage(image) {
   previewTitle.textContent = image.fileName;
   previewImage.src = image.url;
   previewImage.alt = image.name;
   previewAddress.value = absoluteUrl(image.url);
   previewCopy.onclick = () => copyAddress(previewCopy, image);
+  updatePreviewNav();
+}
+
+function openPreviewAt(index) {
+  previewImages = visibleImages();
+  previewIndex = index;
+  const image = previewImages[previewIndex];
+  if (!image) return;
+  showPreviewImage(image);
+  if (!previewDialog.open) previewDialog.showModal();
+}
+
+function openPreview(image) {
+  const images = visibleImages();
+  const index = images.findIndex((item) => item.path === image.path);
+  previewImages = images;
+  previewIndex = index;
+  if (previewIndex < 0) return;
+  showPreviewImage(previewImages[previewIndex]);
   previewDialog.showModal();
+}
+
+function navigatePreview(step) {
+  if (!previewDialog.open || previewIndex < 0) return;
+  const nextIndex = previewIndex + step;
+  if (nextIndex < 0 || nextIndex >= previewImages.length) return;
+  openPreviewAt(nextIndex);
 }
 
 async function runCardAction(card, action) {
@@ -512,6 +554,11 @@ function render() {
   viewGrid.classList.toggle("active", state.view === "grid");
   viewList.classList.toggle("active", state.view === "list");
   bulkActions.hidden = selectedCount === 0;
+  if (previewDialog.open) {
+    previewImages = images;
+    previewIndex = previewImages.findIndex((image) => image.url === previewImage.src || absoluteUrl(image.url) === previewImage.src);
+    updatePreviewNav();
+  }
 }
 
 async function load() {
@@ -549,8 +596,14 @@ function setPendingFiles(files) {
 
 function openUpload(files = []) {
   setPendingFiles(files);
+  if (state.activeMode === "category" && state.activeCategory !== "Alle") {
+    uploadCategory.value = state.activeCategory;
+  } else {
+    uploadCategory.value = "";
+  }
   setStatus(uploadStatus, "");
   if (!uploadDialog.open) uploadDialog.showModal();
+  renderCategoryMenu();
 }
 
 function openEdit(image) {
@@ -619,6 +672,8 @@ mobileSidebarQuery.addEventListener("change", () => {
 
 uploadOpen.addEventListener("click", () => openUpload());
 uploadCancel.addEventListener("click", () => uploadDialog.close());
+previewPrev.addEventListener("click", () => navigatePreview(-1));
+previewNext.addEventListener("click", () => navigatePreview(1));
 dropzone.addEventListener("click", () => uploadFiles.click());
 uploadFiles.addEventListener("change", () => setPendingFiles(uploadFiles.files));
 uploadCategory.addEventListener("focus", openCategoryMenu);
@@ -633,6 +688,16 @@ uploadCategoryToggle.addEventListener("click", () => {
 });
 document.addEventListener("click", (event) => {
   if (!uploadCategoryCombo.contains(event.target)) closeCategoryMenu();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!previewDialog.open) return;
+  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+  const target = event.target;
+  const tagName = target && target.tagName ? target.tagName.toLowerCase() : "";
+  if (tagName === "input" || tagName === "textarea" || tagName === "select") return;
+  event.preventDefault();
+  navigatePreview(event.key === "ArrowLeft" ? -1 : 1);
 });
 
 syncSidebarMode();

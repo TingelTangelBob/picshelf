@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>__TITLE__</title>
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
@@ -34,7 +34,7 @@
           <nav id="filters" aria-label="Ansichten"></nav>
         </div>
         <div class="side-section">
-          <div class="side-label">Kategorie</div>
+          <div class="side-label">Kategorien</div>
           <nav id="categories" aria-label="Kategorien"></nav>
           <form class="form-row" id="category-form">
             <input id="new-category" name="name" placeholder="Neu">
@@ -134,10 +134,16 @@
       <button class="icon-button" value="cancel" title="Schließen" aria-label="Schließen"></button>
     </form>
     <div class="preview-body">
-      <img id="preview-image" alt="">
-      <div class="address-row">
-        <input id="preview-address" readonly>
-        <button class="icon-button" id="preview-copy" type="button" title="Adresse kopieren" aria-label="Adresse kopieren"></button>
+      <div class="preview-frame">
+        <button class="icon-button preview-nav preview-prev" id="preview-prev" type="button" title="Vorheriges Bild" aria-label="Vorheriges Bild"></button>
+        <img id="preview-image" alt="">
+        <button class="icon-button preview-nav preview-next" id="preview-next" type="button" title="Nächstes Bild" aria-label="Nächstes Bild"></button>
+      </div>
+      <div class="preview-footer">
+        <div class="address-row">
+          <input id="preview-address" readonly>
+          <button class="icon-button" id="preview-copy" type="button" title="Adresse kopieren" aria-label="Adresse kopieren"></button>
+        </div>
       </div>
     </div>
   </dialog>
