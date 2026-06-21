@@ -1,0 +1,22 @@
+services:
+  picshelf:
+    build: .
+    image: picshelf:local
+    container_name: picshelf
+    restart: unless-stopped
+    ports:
+      - "8099:8080"
+    environment:
+      TZ: Europe/Berlin
+      PICSHELF_TITLE: PicShelf
+      PICSHELF_IMAGES_DIR: /data/images
+      PICSHELF_CACHE_SECONDS: "3600"
+      PICSHELF_MAX_UPLOAD_MB: "50"
+      PICSHELF_ACCESS_LOG: "0"
+    volumes:
+      - ./images:/data/images
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true

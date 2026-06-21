@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>__TITLE__</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <h1>__TITLE__</h1>
+      </div>
+      <div class="search-wrap">
+        <input class="search" id="search" type="search" placeholder="Suchen" autocomplete="off">
+      </div>
+      <div class="top-actions">
+        <div class="disk-pill" id="disk-pill" title="Speicherplatz"></div>
+        <button class="icon-button" id="theme-toggle" type="button" title="Theme" aria-label="Theme"></button>
+        <button class="icon-button" id="upload-open" type="button" title="Hochladen" aria-label="Hochladen"></button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="side-section">
+          <div class="side-label">Ansicht</div>
+          <nav id="filters" aria-label="Ansichten"></nav>
+        </div>
+        <div class="side-section">
+          <div class="side-label">Kategorie</div>
+          <nav id="categories" aria-label="Kategorien"></nav>
+          <form class="form-row" id="category-form">
+            <input id="new-category" name="name" placeholder="Neu">
+            <button class="icon-button" type="submit" title="Kategorie anlegen" aria-label="Kategorie anlegen"></button>
+          </form>
+          <div class="status" id="category-status"></div>
+        </div>
+        <footer class="sidebar-footer">
+          <a class="donate-button" href="https://github.com/sponsors/TingelTangelBob" target="_blank" rel="noreferrer">Donate</a>
+          <a class="author-link" href="https://github.com/TingelTangelBob" target="_blank" rel="noreferrer">GitHub · TingelTangelBob</a>
+        </footer>
+      </aside>
+
+      <main class="content">
+        <div class="content-head">
+          <div class="count" id="count">Lade Bilder</div>
+          <div class="content-actions">
+            <div class="bulk-actions" id="bulk-actions" hidden>
+              <button class="icon-button" id="selection-clear" type="button" title="Auswahl aufheben" aria-label="Auswahl aufheben"></button>
+              <button class="icon-button danger" id="bulk-delete" type="button" title="Ausgewählte löschen" aria-label="Ausgewählte löschen"></button>
+              <button class="icon-button" id="bulk-download" type="button" title="Ausgewählte herunterladen" aria-label="Ausgewählte herunterladen"></button>
+              <button class="icon-button" id="bulk-share" type="button" title="Ausgewählte teilen" aria-label="Ausgewählte teilen"></button>
+            </div>
+            <div class="view-toggle" role="group" aria-label="Darstellung">
+              <button class="icon-button active" id="view-grid" type="button" title="Grid" aria-label="Grid"></button>
+              <button class="icon-button" id="view-list" type="button" title="Liste" aria-label="Liste"></button>
+            </div>
+          </div>
+        </div>
+        <section class="grid" id="grid" aria-live="polite"></section>
+        <section class="empty" id="empty">Keine Bilder gefunden.</section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="upload-dialog">
+    <form class="dialog-head" method="dialog">
+      <p class="dialog-title">Hochladen</p>
+      <button class="icon-button" value="cancel" title="Schließen" aria-label="Schließen"></button>
+    </form>
+    <form class="dialog-body" id="upload-form">
+      <input class="visually-hidden" id="upload-files" name="files" type="file" accept="image/*,.svg" multiple>
+      <button class="dropzone" id="dropzone" type="button">
+        <span class="drop-icon" id="upload-large-icon"></span>
+        <span id="selected-files">Bild ablegen oder auswählen</span>
+      </button>
+      <div class="combo" id="upload-category-combo">
+        <input id="upload-category" name="category" placeholder="Kategorie" autocomplete="off">
+        <button class="combo-toggle" id="upload-category-toggle" type="button" aria-label="Kategorien anzeigen"></button>
+        <div class="combo-menu" id="category-list" role="listbox"></div>
+      </div>
+      <div class="status" id="upload-status"></div>
+      <div class="dialog-actions">
+        <button type="button" id="upload-cancel">Abbrechen</button>
+        <button class="primary" type="submit">Importieren</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="edit-dialog">
+    <form class="dialog-head" method="dialog">
+      <p class="dialog-title">Bearbeiten</p>
+      <button class="icon-button" value="cancel" title="Schließen" aria-label="Schließen"></button>
+    </form>
+    <form class="dialog-body" id="edit-form">
+      <input id="edit-name" name="name" placeholder="Dateiname">
+      <select id="edit-category" name="category"></select>
+      <div class="status" id="edit-status"></div>
+      <div class="dialog-actions">
+        <button class="danger" id="delete-image" type="button">Löschen</button>
+        <button type="submit" class="primary">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="category-dialog">
+    <form class="dialog-head" method="dialog">
+      <p class="dialog-title">Kategorie</p>
+      <button class="icon-button" value="cancel" title="Schließen" aria-label="Schließen"></button>
+    </form>
+    <form class="dialog-body" id="category-edit-form">
+      <input id="category-edit-name" name="name" placeholder="Kategoriename">
+      <div class="status" id="category-edit-status"></div>
+      <div class="dialog-actions">
+        <button class="danger" id="category-edit-delete" type="button">Löschen</button>
+        <button type="submit" class="primary">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="preview-dialog" class="preview-dialog">
+    <form class="dialog-head" method="dialog">
+      <p class="dialog-title" id="preview-title">Bild</p>
+      <button class="icon-button" value="cancel" title="Schließen" aria-label="Schließen"></button>
+    </form>
+    <div class="preview-body">
+      <img id="preview-image" alt="">
+      <div class="address-row">
+        <input id="preview-address" readonly>
+        <button class="icon-button" id="preview-copy" type="button" title="Adresse kopieren" aria-label="Adresse kopieren"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="confirm-dialog">
+    <form class="dialog-head" method="dialog">
+      <p class="dialog-title" id="confirm-title">Bestätigen</p>
+      <button class="icon-button" value="cancel" title="Schließen" aria-label="Schließen"></button>
+    </form>
+    <div class="dialog-body">
+      <p class="confirm-message" id="confirm-message"></p>
+      <div class="dialog-actions">
+        <button type="button" id="confirm-cancel">Abbrechen</button>
+        <button class="danger" type="button" id="confirm-ok">Löschen</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="drop-overlay" id="drop-overlay">
+    <div class="drop-overlay-box">Import vorbereiten</div>
+  </div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
