@@ -11,9 +11,12 @@ const icons = {
   download: '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
   share: '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>',
   check: '<svg viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>',
+  menu: '<svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>',
   monitor: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>',
   sun: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
-  moon: '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></svg>'
+  moon: '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></svg>',
+  github: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.48c.5.09.68-.21.68-.47v-1.65c-2.77.6-3.35-1.19-3.35-1.19-.45-1.15-1.1-1.46-1.1-1.46-.9-.61.07-.6.07-.6 1 .07 1.52 1.02 1.52 1.02.88 1.52 2.31 1.08 2.87.83.09-.64.34-1.08.62-1.33-2.21-.25-4.53-1.1-4.53-4.93 0-1.09.39-1.98 1.02-2.68-.1-.25-.44-1.28.1-2.66 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 7.84c.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.54 1.38.2 2.41.1 2.66.63.7 1.02 1.59 1.02 2.68 0 3.84-2.33 4.67-4.55 4.92.35.3.66.88.66 1.77v2.62c0 .26.18.57.69.47A10 10 0 0 0 12 2Z"/></svg>',
+  heart: '<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.42C.4 9.6 1.42 5.5 5.3 4.4c2.1-.6 4.06.16 5.2 1.72 1.14-1.56 3.1-2.32 5.2-1.72 3.88 1.1 4.9 5.2 2.8 8.18C19 16.65 12 21 12 21Z"/></svg>'
 };
 
 const state = {
@@ -26,10 +29,14 @@ const state = {
   pendingFiles: [],
   editing: null,
   selected: new Set(),
-  meta: null
+  meta: null,
+  sidebarOpen: true
 };
 
+const app = document.querySelector("#app");
 const grid = document.querySelector("#grid");
+const sidebarToggle = document.querySelector("#sidebar-toggle");
+const sidebarBackdrop = document.querySelector("#sidebar-backdrop");
 const brandHome = document.querySelector("#brand-home");
 const filters = document.querySelector("#filters");
 const categoriesNav = document.querySelector("#categories");
@@ -82,16 +89,11 @@ const confirmMessage = document.querySelector("#confirm-message");
 const confirmCancel = document.querySelector("#confirm-cancel");
 const confirmOk = document.querySelector("#confirm-ok");
 const buildVersion = document.querySelector("#build-version");
-const buildNote = document.querySelector("#build-note");
-const buildUpdate = document.querySelector("#build-update");
-const aboutDialog = document.querySelector("#about-dialog");
-const aboutVersion = document.querySelector("#about-version");
-const aboutBuild = document.querySelector("#about-build");
-const updateCommand = document.querySelector("#update-command");
-const copyUpdateCommand = document.querySelector("#copy-update-command");
-const closeAbout = document.querySelector("#close-about");
+const githubLink = document.querySelector("#github-link");
+const donateLink = document.querySelector("#donate-link");
 
 uploadOpen.innerHTML = icons.upload;
+sidebarToggle.innerHTML = icons.menu;
 themeToggle.innerHTML = icons.monitor;
 viewGrid.innerHTML = icons.grid;
 viewList.innerHTML = icons.list;
@@ -103,9 +105,12 @@ selectionClear.innerHTML = icons.close;
 bulkDelete.innerHTML = icons.trash;
 bulkDownload.innerHTML = icons.download;
 bulkShare.innerHTML = icons.share;
+githubLink.innerHTML = icons.github;
+donateLink.innerHTML = icons.heart;
 
 let editingCategory = "";
 let themeMode = localStorage.getItem("picshelf-theme") || "system";
+let sidebarMode = localStorage.getItem("picshelf-sidebar");
 let confirmResolve = null;
 
 function applyTheme() {
@@ -168,33 +173,24 @@ function renderDisk(disk) {
 function renderBuild(meta) {
   if (!meta) {
     buildVersion.textContent = "unbekannt";
-    buildNote.textContent = "Build-Metadaten fehlen";
-    aboutVersion.textContent = "unbekannt";
-    aboutBuild.textContent = "";
-    updateCommand.value = "docker compose pull && docker compose up -d";
     return;
   }
-  const label = meta.build && meta.build !== "local" ? `${meta.version} · ${meta.build}` : meta.version;
-  buildVersion.textContent = label;
-  buildNote.textContent = "Update über Docker Compose";
-  aboutVersion.textContent = meta.version;
-  aboutBuild.textContent = meta.build && meta.build !== "local" ? ` (${meta.build})` : "";
-  updateCommand.value = meta.updateCommand || "docker compose pull && docker compose up -d";
+  buildVersion.textContent = meta.version;
 }
 
-function openAbout() {
-  aboutDialog.showModal();
+function setSidebarOpen(open) {
+  state.sidebarOpen = open;
+  app.classList.toggle("sidebar-collapsed", !open);
+  sidebarToggle.innerHTML = open ? icons.close : icons.menu;
+  sidebarToggle.title = open ? "Seitenleiste schließen" : "Seitenleiste öffnen";
+  sidebarToggle.setAttribute("aria-label", sidebarToggle.title);
+  sidebarToggle.setAttribute("aria-expanded", String(open));
 }
 
-async function copyUpdateCommandToClipboard() {
-  try {
-    await navigator.clipboard.writeText(updateCommand.value);
-  } catch {
-    updateCommand.focus();
-    updateCommand.select();
-    document.execCommand("copy");
-    updateCommand.setSelectionRange(0, 0);
-  }
+function toggleSidebar() {
+  sidebarMode = state.sidebarOpen ? "closed" : "open";
+  localStorage.setItem("picshelf-sidebar", sidebarMode);
+  setSidebarOpen(!state.sidebarOpen);
 }
 
 function askConfirm({ title = "Bestätigen", message, action = "Löschen" }) {
@@ -231,7 +227,6 @@ closeOnBackdrop(editDialog);
 closeOnBackdrop(categoryDialog);
 closeOnBackdrop(previewDialog);
 closeOnBackdrop(confirmDialog, () => resolveConfirm(false));
-closeOnBackdrop(aboutDialog);
 
 function categoryNames() {
   return state.categories.map((category) => category.name);
@@ -575,9 +570,13 @@ search.addEventListener("input", () => {
 });
 
 themeToggle.addEventListener("click", cycleTheme);
-buildUpdate.addEventListener("click", openAbout);
-copyUpdateCommand.addEventListener("click", copyUpdateCommandToClipboard);
-closeAbout.addEventListener("click", () => aboutDialog.close());
+sidebarToggle.addEventListener("click", toggleSidebar);
+sidebarBackdrop.addEventListener("click", () => {
+  if (window.matchMedia("(max-width: 760px)").matches) {
+    localStorage.setItem("picshelf-sidebar", "closed");
+    setSidebarOpen(false);
+  }
+});
 confirmCancel.addEventListener("click", () => resolveConfirm(false));
 confirmOk.addEventListener("click", () => resolveConfirm(true));
 confirmDialog.addEventListener("cancel", (event) => {
@@ -598,6 +597,21 @@ viewList.addEventListener("click", () => {
   render();
 });
 
+const mobileSidebarQuery = window.matchMedia("(max-width: 760px)");
+
+function syncSidebarMode() {
+  const stored = localStorage.getItem("picshelf-sidebar");
+  const open = stored ? stored === "open" : !mobileSidebarQuery.matches;
+  setSidebarOpen(open);
+}
+
+mobileSidebarQuery.addEventListener("change", () => {
+  const stored = localStorage.getItem("picshelf-sidebar");
+  if (!stored) {
+    setSidebarOpen(!mobileSidebarQuery.matches);
+  }
+});
+
 uploadOpen.addEventListener("click", () => openUpload());
 uploadCancel.addEventListener("click", () => uploadDialog.close());
 dropzone.addEventListener("click", () => uploadFiles.click());
@@ -615,6 +629,8 @@ uploadCategoryToggle.addEventListener("click", () => {
 document.addEventListener("click", (event) => {
   if (!uploadCategoryCombo.contains(event.target)) closeCategoryMenu();
 });
+
+syncSidebarMode();
 
 dropzone.addEventListener("dragover", (event) => {
   event.preventDefault();

@@ -631,7 +631,6 @@ class PicShelfHandler(BaseHTTPRequestHandler):
                 {
                     "version": __version__,
                     "build": self.config["build_label"],
-                    "updateCommand": "docker compose pull && docker compose up -d",
                 },
             )
             return
