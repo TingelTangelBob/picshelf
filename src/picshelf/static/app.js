@@ -11,14 +11,14 @@ const icons = {
   download: '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
   share: '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>',
   check: '<svg viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg>',
-  sidebarOpen: '<svg viewBox="0 0 24 24"><path d="M21 4H9a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12"/><path d="m11 8-4 4 4 4"/></svg>',
-  sidebarClose: '<svg viewBox="0 0 24 24"><path d="M3 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3"/><path d="m13 8 4 4-4 4"/></svg>',
+  sidebarOpen: '<svg viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/><path d="M19 4v16"/></svg>',
+  sidebarClose: '<svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/><path d="M5 4v16"/></svg>',
   images: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>',
   monitor: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>',
   sun: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
   moon: '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></svg>',
   github: '<svg class="solid-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.2 1.9 1.2 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.3 11.3 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>',
-  donate: '<svg viewBox="0 0 24 24"><path d="M11 19H6.5a2.5 2.5 0 0 1 0-5H9"/><path d="M9 17h2.8a2 2 0 0 0 1.4-.6l5.3-5.3a2.1 2.1 0 0 1 3 3L16 19.6a4.8 4.8 0 0 1-3.4 1.4H8"/><path d="M12 7.5 10.8 6.4a3 3 0 1 1 4.4-4.1L16 3l.8-.7a3 3 0 1 1 4.4 4.1L16 11.5Z"/></svg>'
+  donate: '<svg viewBox="0 0 24 24"><path d="M12 21s-7.2-4.7-9.7-8.5C.8 8.8 2.5 5.2 6 4.2c1.9-.6 4 .1 5.2 1.7 1.2-1.6 3.3-2.3 5.2-1.7 3.5 1 5.2 4.6 3.7 8.3C19.2 16.3 12 21 12 21Z"/></svg>'
 };
 
 const state = {
@@ -94,16 +94,10 @@ const buildVersion = document.querySelector("#build-version");
 const versionLink = document.querySelector("#version-link");
 const githubLink = document.querySelector("#github-link");
 const donateLink = document.querySelector("#donate-link");
-const sidebarImages = document.querySelector(".side-tool.active");
-const sidebarUpload = document.querySelector("#sidebar-upload");
-const sidebarTheme = document.querySelector("#sidebar-theme");
 
 uploadOpen.innerHTML = icons.upload;
 sidebarToggle.innerHTML = icons.sidebarClose;
 themeToggle.innerHTML = icons.monitor;
-sidebarImages.innerHTML = icons.images;
-sidebarUpload.innerHTML = icons.upload;
-sidebarTheme.innerHTML = icons.monitor;
 viewGrid.innerHTML = icons.grid;
 viewList.innerHTML = icons.list;
 document.querySelector("#upload-large-icon").innerHTML = icons.upload;
@@ -126,25 +120,16 @@ function applyTheme() {
   document.documentElement.dataset.theme = themeMode === "system" ? "" : themeMode;
   if (themeMode === "light") {
     themeToggle.innerHTML = icons.sun;
-    sidebarTheme.innerHTML = icons.sun;
     themeToggle.title = "Theme: Hell";
     themeToggle.setAttribute("aria-label", "Theme: Hell");
-    sidebarTheme.title = "Theme: Hell";
-    sidebarTheme.setAttribute("aria-label", "Theme: Hell");
   } else if (themeMode === "dark") {
     themeToggle.innerHTML = icons.moon;
-    sidebarTheme.innerHTML = icons.moon;
     themeToggle.title = "Theme: Dunkel";
     themeToggle.setAttribute("aria-label", "Theme: Dunkel");
-    sidebarTheme.title = "Theme: Dunkel";
-    sidebarTheme.setAttribute("aria-label", "Theme: Dunkel");
   } else {
     themeToggle.innerHTML = icons.monitor;
-    sidebarTheme.innerHTML = icons.monitor;
     themeToggle.title = "Theme: System";
     themeToggle.setAttribute("aria-label", "Theme: System");
-    sidebarTheme.title = "Theme: System";
-    sidebarTheme.setAttribute("aria-label", "Theme: System");
   }
 }
 
@@ -583,7 +568,6 @@ brandHome.addEventListener("click", () => {
   search.value = "";
   render();
 });
-sidebarImages.addEventListener("click", () => brandHome.click());
 
 search.addEventListener("input", () => {
   state.query = search.value;
@@ -591,7 +575,6 @@ search.addEventListener("input", () => {
 });
 
 themeToggle.addEventListener("click", cycleTheme);
-sidebarTheme.addEventListener("click", cycleTheme);
 sidebarToggle.addEventListener("click", toggleSidebar);
 sidebarBackdrop.addEventListener("click", () => {
   if (window.matchMedia("(max-width: 760px)").matches) {
@@ -635,7 +618,6 @@ mobileSidebarQuery.addEventListener("change", () => {
 });
 
 uploadOpen.addEventListener("click", () => openUpload());
-sidebarUpload.addEventListener("click", () => openUpload());
 uploadCancel.addEventListener("click", () => uploadDialog.close());
 dropzone.addEventListener("click", () => uploadFiles.click());
 uploadFiles.addEventListener("change", () => setPendingFiles(uploadFiles.files));
