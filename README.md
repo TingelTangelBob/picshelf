@@ -85,7 +85,7 @@ Für einen bestehenden Docker-Host kann diese Compose-Datei als Vorlage dienen:
 ```yaml
 services:
   picshelf:
-    image: ghcr.io/dein-name/picshelf:latest
+    image: ghcr.io/tingeltangelbob/picshelf:latest
     container_name: picshelf
     restart: unless-stopped
     ports:
@@ -117,18 +117,13 @@ Ohne `PICSHELF_BASE_URL` erzeugt die Oberfläche die Adresse aus der aktuell ge�
 
 ## Portainer
 
-Wenn du PicShelf in Portainer als Stack deployen willst, nutze die Datei `docker-compose.portainer.yml`.
-Sie baut direkt aus dem GitHub-Repo und braucht deshalb keinen lokalen `Dockerfile`-Pfad im Portainer-Editor.
-
-Wenn du den Stack manuell einfügst, funktioniert dieser Aufbau:
+Wenn du PicShelf in Portainer per Copy-and-Paste deployen willst, nutze die Datei `docker-compose.portainer.yml`.
+Sie zieht ein fertiges Image aus GHCR und braucht deshalb keinen Build-Kontext und keinen lokalen `Dockerfile`-Pfad.
 
 ```yaml
 services:
   picshelf:
-    build:
-      context: https://github.com/TingelTangelBob/picshelf.git#main
-      dockerfile: Dockerfile
-    image: picshelf:portainer
+    image: ghcr.io/tingeltangelbob/picshelf:latest
     container_name: picshelf
     restart: unless-stopped
     ports:
@@ -141,13 +136,25 @@ services:
       PICSHELF_MAX_UPLOAD_MB: "50"
       PICSHELF_ACCESS_LOG: "0"
     volumes:
-      - /pfad/zu/bildern:/data/images
+      - picshelf-images:/data/images
     read_only: true
     tmpfs:
       - /tmp
     security_opt:
       - no-new-privileges:true
+
+volumes:
+  picshelf-images:
 ```
+
+## Varianten
+
+- `docker compose up -d --build` für lokale Entwicklung mit den Bildern im Repo-Ordner `images/`
+- `docker-compose.portainer.yml` für Portainer ohne Build-Schritt und ohne Anpassungen; dort liegt das Bildmaterial in einem benannten Volume statt in einem Host-Pfad, damit der Stack wirklich copy-paste-fähig bleibt
+- GitHub Actions veröffentlicht bei jedem Push auf `main` ein aktuelles Container-Image nach GHCR
+- Wer die Bilder lieber direkt im ausgecheckten Repo ablegen will, kann den lokalen `images/`-Ordner weiter nutzen
+
+Hinweis: Nach dem ersten Push muss der GitHub-Action-Run einmal durchlaufen, bevor Portainer das Image `ghcr.io/tingeltangelbob/picshelf:latest` ziehen kann.
 
 ## Konfiguration
 

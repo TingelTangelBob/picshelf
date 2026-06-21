@@ -1,9 +1,6 @@
 services:
   picshelf:
-    build:
-      context: https://github.com/TingelTangelBob/picshelf.git#main
-      dockerfile: Dockerfile
-    image: picshelf:portainer
+    image: ghcr.io/tingeltangelbob/picshelf:latest
     container_name: picshelf
     restart: unless-stopped
     ports:
@@ -16,9 +13,12 @@ services:
       PICSHELF_MAX_UPLOAD_MB: "50"
       PICSHELF_ACCESS_LOG: "0"
     volumes:
-      - /pfad/zu/bildern:/data/images
+      - picshelf-images:/data/images
     read_only: true
     tmpfs:
       - /tmp
     security_opt:
       - no-new-privileges:true
+
+volumes:
+  picshelf-images:
