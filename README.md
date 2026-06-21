@@ -51,12 +51,8 @@ http://<host-ip>:8099
 
 ## Screenshot
 
-Hier kann ein aktueller Screenshot des Projekts eingebunden werden.
-Wenn du später einen Screenshot im Repo ablegst, kannst du ihn hier direkt referenzieren, zum Beispiel:
+<img width="967" height="576" alt="image" src="https://github.com/user-attachments/assets/8f34ec20-5b44-4775-90d4-8199817d5d13" />
 
-```md
-![PicShelf Screenshot](docs/screenshot.png)
-```
 
 ## Bilder ablegen
 
