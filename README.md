@@ -46,7 +46,16 @@ http://localhost:8099
 Im Heimnetz kann statt `localhost` die IP des Hosts verwendet werden, zum Beispiel:
 
 ```text
-http://192.168.178.191:8099
+http://<host-ip>:8099
+```
+
+## Screenshot
+
+Hier kann ein aktueller Screenshot des Projekts eingebunden werden.
+Wenn du später einen Screenshot im Repo ablegst, kannst du ihn hier direkt referenzieren, zum Beispiel:
+
+```md
+![PicShelf Screenshot](docs/screenshot.png)
 ```
 
 ## Bilder ablegen
@@ -101,7 +110,7 @@ Wenn die kopierte Bildadresse immer eine feste Heimnetz-Adresse enthalten soll, 
 
 ```yaml
 environment:
-  PICSHELF_BASE_URL: http://192.168.178.191:8099
+  PICSHELF_BASE_URL: http://<host-ip>:8099
 ```
 
 Ohne `PICSHELF_BASE_URL` erzeugt die Oberfläche die Adresse aus der aktuell geöffneten Browser-URL.
